@@ -20,7 +20,7 @@ Environment:
 
 import os
 import sys
-from mistralai import Mistral
+from mistralai.client import Mistral
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONFIGURATION

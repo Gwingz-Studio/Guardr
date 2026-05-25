@@ -55,8 +55,11 @@ impl Database {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, sqlx::Type)]
 #[sqlx(type_name = "TEXT")]
 pub enum UserSubscriptionTier {
+    #[sqlx(rename = "free")]
     Free,
+    #[sqlx(rename = "pro")]
     Pro,
+    #[sqlx(rename = "enterprise")]
     Enterprise,
 }
 

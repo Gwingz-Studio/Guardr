@@ -3,7 +3,7 @@ use argon2::{Argon2, PasswordHash, PasswordHasher, PasswordVerifier};
 use argon2::password_hash::{rand_core::OsRng, SaltString};
 use axum::{
     async_trait,
-    extract::{FromRequest, FromRequestParts, Request},
+    extract::{FromRef, FromRequest, FromRequestParts, Request},
     http::{header::AUTHORIZATION, request::Parts},
 };
 use base64::{Engine as _, engine::general_purpose};
@@ -19,6 +19,7 @@ use validator::{Validate, ValidationError};
 use crate::config::Settings;
 use crate::database::{User, UserSubscriptionTier};
 use crate::errors::AppError;
+use crate::state::AppState;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Claims {
@@ -273,6 +274,7 @@ pub struct AuthenticatedUser {
 impl<S> FromRequestParts<S> for AuthenticatedUser
 where
     S: Send + Sync,
+    AppState: FromRef<S>,
 {
     type Rejection = AppError;
 
@@ -288,10 +290,9 @@ where
             None => return Err(AppError::Unauthorized("Missing authorization header".to_string())),
         };
 
-        // Extract auth service from app state (this would need to be implemented based on your state structure)
-        let auth_service = AuthService::new(crate::config::Settings::default()); // This should come from state
+        let state = AppState::from_ref(_state);
         
-        let claims = auth_service.verify_access_token(token)
+        let claims = state.auth.verify_access_token(token)
             .map_err(|e| AppError::Unauthorized(e.to_string()))?;
 
         let user_id = Uuid::parse_str(&claims.sub)

@@ -39,8 +39,7 @@ pub async fn lookup_dns(domain: &str) -> Result<DnsRecords> {
     }
 
     info!(
-        "DNS lookup for {}: {} A, {} MX, {} NS, {} TXT records",
-        domain,
+        "DNS lookup complete: {} A, {} MX, {} NS, {} TXT records",
         records.a_records.len(),
         records.mx_records.len(),
         records.ns_records.len(),

@@ -17,15 +17,17 @@ pub async fn investigate(
     messages: Option<&[String]>,
     config: &OsintConfig,
 ) -> Result<InvestigationReport> {
-    let objective = format!(
-        "Investigate safety of dating profile: email={}, username={}, name={}, location={}",
-        email.unwrap_or("N/A"),
-        username.unwrap_or("N/A"),
-        name.unwrap_or("N/A"),
-        location.unwrap_or("N/A"),
-    );
+    let objective = "Investigate dating-profile safety using transient inputs".to_string();
 
-    info!("PERA Investigation started: {}", objective);
+    info!(
+        has_email = email.is_some(),
+        has_username = username.is_some(),
+        has_name = name.is_some(),
+        has_location = location.is_some(),
+        has_image = image_url.is_some(),
+        message_count = messages.map(|msgs| msgs.len()).unwrap_or(0),
+        "PERA Investigation started"
+    );
 
     let mut findings: Vec<InvestigationFinding> = Vec::new();
     let mut cycle = 0;
@@ -43,7 +45,7 @@ pub async fn investigate(
                 Ok(breaches) => {
                     findings.push(InvestigationFinding {
                         tool: "HIBP".to_string(),
-                        query: email.to_string(),
+                        query: "email".to_string(),
                         success: true,
                         confidence: 0.95,
                         data: serde_json::json!({
@@ -56,7 +58,7 @@ pub async fn investigate(
                     warn!("HIBP check failed: {}", e);
                     findings.push(InvestigationFinding {
                         tool: "HIBP".to_string(),
-                        query: email.to_string(),
+                        query: "email".to_string(),
                         success: false,
                         confidence: 0.0,
                         data: serde_json::json!({"error": e.to_string()}),
@@ -71,7 +73,7 @@ pub async fn investigate(
                 Ok(breaches) => {
                     findings.push(InvestigationFinding {
                         tool: "BreachDirectory".to_string(),
-                        query: email.to_string(),
+                        query: "email".to_string(),
                         success: true,
                         confidence: 0.85,
                         data: serde_json::json!({
@@ -84,7 +86,7 @@ pub async fn investigate(
                     warn!("BreachDirectory check failed: {}", e);
                     findings.push(InvestigationFinding {
                         tool: "BreachDirectory".to_string(),
-                        query: email.to_string(),
+                        query: "email".to_string(),
                         success: false,
                         confidence: 0.0,
                         data: serde_json::json!({"error": e.to_string()}),
@@ -116,8 +118,8 @@ pub async fn investigate(
         let found_count = results.iter().filter(|r| r.found).count();
 
         findings.push(InvestigationFinding {
-            tool: "UsernameSearch".to_string(),
-            query: username.to_string(),
+                        tool: "UsernameSearch".to_string(),
+                        query: "username".to_string(),
             success: true,
             confidence: 0.8,
             data: serde_json::json!({
@@ -174,7 +176,7 @@ pub async fn investigate(
                     Ok(result) => {
                         findings.push(InvestigationFinding {
                             tool: "RealityDefender".to_string(),
-                            query: img.to_string(),
+                            query: "image".to_string(),
                             success: true,
                             confidence: 0.85,
                             data: serde_json::to_value(&result).unwrap_or_default(),
@@ -190,7 +192,7 @@ pub async fn investigate(
                     Ok(result) => {
                         findings.push(InvestigationFinding {
                             tool: "FaceCheck".to_string(),
-                            query: img.to_string(),
+                            query: "image".to_string(),
                             success: true,
                             confidence: 0.8,
                             data: serde_json::to_value(&result).unwrap_or_default(),
@@ -230,7 +232,7 @@ pub async fn investigate(
                             data: serde_json::to_value(&intel).unwrap_or_default(),
                         });
                     }
-                    Err(e) => warn!("Shodan lookup failed for {}: {}", ip, e),
+                    Err(e) => warn!("Shodan lookup failed: {}", e),
                 }
             }
         }

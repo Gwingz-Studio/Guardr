@@ -34,7 +34,7 @@ pub async fn search_breaches(query: &str, query_type: &str, rapidapi_key: &str) 
     match response.status().as_u16() {
         200 => {
             let body: serde_json::Value = response.json().await?;
-            info!("BreachDirectory: Response for {} ({})", query, query_type);
+            info!("BreachDirectory: Response received ({})", query_type);
 
             let mut records = Vec::new();
             if let Some(result) = body.get("result").and_then(|r| r.as_array()) {

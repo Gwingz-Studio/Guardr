@@ -100,6 +100,13 @@ const PLATFORMS: &[PlatformCheck] = &[
         auth_wall_codes: &[],
         auth_gated: false,
     },
+    PlatformCheck {
+        name: "Tinder",
+        url_template: "https://tinder.com/@{}",
+        not_found_indicators: &["404 Not Found", "Page Not Found", "Looks like this page doesn't exist", "Oops! Something went wrong"],
+        auth_wall_codes: &[],
+        auth_gated: false,
+    },
 ];
 
 /// Search for a username across multiple social platforms concurrently
@@ -140,8 +147,7 @@ pub async fn search_username(username: &str) -> Vec<UsernameResult> {
 
     let found_count = results.iter().filter(|r| r.found).count();
     info!(
-        "Username search for '{}': found on {}/{} platforms",
-        username,
+        "Username search complete: found on {}/{} platforms",
         found_count,
         results.len()
     );

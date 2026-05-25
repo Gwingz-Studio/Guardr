@@ -26,7 +26,7 @@ pub async fn lookup_ip(ip: &str) -> Result<IpIntelligence> {
                 return Err(anyhow::anyhow!("IP lookup failed: reserved or invalid IP"));
             }
 
-            info!("IP lookup: Data retrieved for {}", ip);
+            info!("IP lookup: Data retrieved");
 
             Ok(IpIntelligence {
                 ip: ip.to_string(),
@@ -57,6 +57,6 @@ pub async fn lookup_rdap(ip: &str) -> Result<serde_json::Value> {
         .await?;
 
     let body: serde_json::Value = response.json().await?;
-    info!("RDAP lookup complete for {}", ip);
+    info!("RDAP lookup complete");
     Ok(body)
 }

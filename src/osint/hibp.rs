@@ -36,7 +36,7 @@ pub async fn check_breaches(email: &str, api_key: &str) -> Result<Vec<BreachReco
     match response.status().as_u16() {
         200 => {
             let breaches: Vec<HibpBreach> = response.json().await?;
-            info!("HIBP: Found {} breaches for {}", breaches.len(), email);
+            info!("HIBP: Found {} breaches", breaches.len());
             Ok(breaches
                 .into_iter()
                 .map(|b| BreachRecord {
@@ -49,7 +49,7 @@ pub async fn check_breaches(email: &str, api_key: &str) -> Result<Vec<BreachReco
                 .collect())
         }
         404 => {
-            info!("HIBP: No breaches found for {}", email);
+            info!("HIBP: No breaches found");
             Ok(vec![])
         }
         429 => {

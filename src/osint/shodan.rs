@@ -17,7 +17,7 @@ pub async fn lookup_internetdb(ip: &str) -> Result<IpIntelligence> {
     match response.status().as_u16() {
         200 => {
             let body: serde_json::Value = response.json().await?;
-            info!("Shodan InternetDB: Found data for {}", ip);
+            info!("Shodan InternetDB: Found data");
 
             Ok(IpIntelligence {
                 ip: ip.to_string(),
@@ -44,7 +44,7 @@ pub async fn lookup_internetdb(ip: &str) -> Result<IpIntelligence> {
             })
         }
         404 => {
-            info!("Shodan InternetDB: No data for {}", ip);
+            info!("Shodan InternetDB: No data");
             Ok(IpIntelligence {
                 ip: ip.to_string(),
                 open_ports: vec![],
@@ -75,7 +75,7 @@ pub async fn lookup_host(ip: &str, api_key: &str) -> Result<IpIntelligence> {
     match response.status().as_u16() {
         200 => {
             let body: serde_json::Value = response.json().await?;
-            info!("Shodan: Full host data for {}", ip);
+            info!("Shodan: Full host data retrieved");
 
             Ok(IpIntelligence {
                 ip: ip.to_string(),

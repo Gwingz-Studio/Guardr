@@ -271,7 +271,7 @@ impl Settings {
             settings.osint.dehashed_email = Some(dehashed_email);
         }
 
-        if let Ok(serper_key) = env::var("SERPER_API_KEY") {
+        if let Ok(serper_key) = env::var("SERPER_API_KEY").or_else(|_| env::var("SERP_API_KEY")) {
             settings.osint.serper_api_key = Some(serper_key);
         }
 
@@ -311,7 +311,7 @@ impl Settings {
             settings.osint.facecheck_api_key = Some(facecheck_key);
         }
 
-        if let Ok(reality_key) = env::var("REALITY_DEFENDER_API_KEY") {
+        if let Ok(reality_key) = env::var("REALITY_DEFENDER_API_KEY").or_else(|_| env::var("REALITYDEFENDER_API_KEY")) {
             settings.osint.reality_defender_api_key = Some(reality_key);
         }
 
