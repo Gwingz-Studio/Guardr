@@ -1,1 +1,19 @@
-{ "name": "guardr", "compatibility_date": "2026-08-20", "assets": { "directory": "./out", "not_found_handling": "404-page" } }
+{
+  "name": "guardr",
+  "compatibility_date": "2026-08-20",
+  "assets": { "directory": "./out", "not_found_handling": "404-page" },
+  "routes": [
+    { "pattern": "guardr.gwingz.com", "zone_name": "gwingz.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true },
+  "d1_databases": [
+    { "binding": "guardr-db", "database_name": "midnight", "database_id": "67fcf89c-bc6d-413c-a1a3-b92aedc1f4ce" }
+  ],
+  "services": [
+    { "binding": "housesitter", "service": "golden-wings-robyn", "environment": "production" },
+    { "binding": "midnight", "service": "guardr", "environment": "production" }
+  ],
+  "send_email": [ { "name": "mxm" } ],
+  "ai_search": [ { "binding": "jeeves", "instance_name": "floral-river-415f" } ],
+  "worker_loaders": [ { "binding": "gworls" } ]
+}
