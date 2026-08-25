@@ -120,3 +120,4 @@ node_modules/
 
 # DigitalOcean API spec (contains example webhook URLs that trigger secret scanning)
 doctl/DigitalOcean-public.v2.yaml
+third_party/tinder-api/
