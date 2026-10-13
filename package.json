@@ -21,6 +21,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@github/copilot-win32-x64": "^1.0.75"
+    "@github/copilot-win32-x64": "^1.0.75",
+    "next": "^16.4.0"
   }
 }
